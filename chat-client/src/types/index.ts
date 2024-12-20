@@ -1,10 +1,9 @@
-// Login form take following values
+
 export type LoginFormValues = {
     password: string;
     email: string;
 };
 
-// Register form take following values
 export type RegisterFormValues = {
     name: string;
     phone: string;
@@ -12,7 +11,6 @@ export type RegisterFormValues = {
     email: string;
 };
 
-// A user state is an object with the following properties
 export interface userState {
     themeLight: string;
     token: string;
@@ -20,7 +18,6 @@ export interface userState {
 }
 
 
-// user Data contain the data that a user object can have
 export interface userData {
     email: string;
     name: string;
@@ -32,8 +29,6 @@ export interface userData {
     messages: message[];
 
 }
-
-// group Data contain the data that a group object can have
 export interface groupData {
     email: string;
     online  :boolean
@@ -45,8 +40,6 @@ export interface groupData {
     messages: message[];
 }
 
-
-// A chat state is an object with the following properties
 export interface chatState {
     groupMessages: Record<string, groupMessges>;
     userOnline: boolean;

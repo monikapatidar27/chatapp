@@ -1,6 +1,6 @@
 import express from 'express';
 import { LoginUser, RegisterUser } from '../controller/auth.js';
-import { getAllUsers, getChat, sendMessage } from '../controller/chat.js';
+import { createGroup, getAllGroups, getAllUsers, getChat, getGroupChat, sendGroupMessage, sendMessage } from '../controller/chat.js';
 import authenticateToken from '../middleware/index.js';
 const Router = express.Router();
 
@@ -12,10 +12,10 @@ Router.get('/get-user-chat', authenticateToken ,getChat)
 Router.post('/send-user-message', sendMessage)
 
 
-// Router.post('/create-group', authenticateToken, createGroup)
-// Router.get('/get-user-group',authenticateToken, getAllGroups)
-// Router.post('/send-group-message',authenticateToken , sendGroupMessage)
-// Router.get('/get-group-chat',authenticateToken, getGroupChat)
+Router.post('/create-group', authenticateToken, createGroup)
+Router.get('/get-user-group',authenticateToken, getAllGroups)
+Router.post('/send-group-message',authenticateToken , sendGroupMessage)
+Router.get('/get-group-chat',authenticateToken, getGroupChat)
 
 // Router.delete('/delete-group' , authenticateToken, deleteGroup )
 // Router.delete('/delete-group-message-from-me' , authenticateToken , deleteMessageFromMe)

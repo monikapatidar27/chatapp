@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import { sendMessageSchemaValidation } from "../validations/index.js";
-// import GroupChat from "../models/GroupChat.js";
+import GroupChat from "../models/GroupChat.js";
 
 export const getAllUsers = async (req, res) => {
     const id = req.query.id;
@@ -13,6 +13,26 @@ export const getAllUsers = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Something went wrong' })
     }
 }
+export const getAllGroups = async(req,res) => {
+    const id = req.query.id;
+    if(!id || id === 'undefined'){
+        return res.status(400).json({success:false,message:"Id is required"})
+    }
+    const query ={
+        $or :[
+            {createdBy: id},
+            {users: id}
+        ]
+    };
+    try {
+        const getGroupofThisUser = await GroupChat.find(query).populate('users')
+        .select('-password').populate('createdBy');
+        return res.status(200).json({success:true,data:getGroupofThisUser})
+    }
+    catch(err){
+        return res.status(500).json({success:false,message:"Somethings wents wrong"})
+    }
+};
 
 // export const getAllGroups = async (req, res) => {
 //     const id = req.query.id;
@@ -32,7 +52,20 @@ export const getAllUsers = async (req, res) => {
 //     }
 // }
 
-
+export const createGroup = async(req,res) => {
+    const {name,users,createdBy} = req.body;
+    if(!name || !users || !createdBy){
+        return res.status(400).json({success:false,message:"Name is required."})
+    }
+    try {
+        const newGroup = new GroupChat({ name, users, createdBy });
+        await newGroup.save();
+        return res.status(200).json({ success: true, message: "Group created successfully"})
+    }
+    catch(err){
+        return res.status(500).json({success:false,message:"Somthing wents wrong."})
+    }
+}
 // export const createGroup = async (req, res) => {
 //     const { name, users, createdBy } = req.body;
 
@@ -70,36 +103,36 @@ export const getChat = async (req, res) => {
 
 
 
-// export const getGroupChat = async (req, res) => {
-//     const { senderId, receiverId, groupId } = req.query;
-//     try {
-//         const groups = await GroupChat.find({ _id: groupId });
+export const getGroupChat = async (req, res) => {
+    const { senderId, receiverId, groupId } = req.query;
+    try {
+        const groups = await GroupChat.find({ _id: groupId });
 
-//         const allMessages = await Chat.find({ receiver: receiverId });
+        const allMessages = await Chat.find({ receiver: receiverId });
 
-//         const senderDeletedMessagesEntry = groups.reduce((result, group) => {
-//             const deletedMessageEntry = group.deletedMessage.find(
-//                 (entry) => entry.userID.toString() === senderId
-//             );
-//             if (deletedMessageEntry) {
-//                 result.push(...deletedMessageEntry.deletedMessageofThisUser?.map((msg) => msg?.toString()));
-//             }
-//             return result;
-//         }, []);
-//         const filteredChat = allMessages.map((message) => {
-//             if (senderDeletedMessagesEntry.includes(message?._id?.toString())) {
-//                 return null;
-//             } else {
-//                 return message?.toObject();
-//             }
-//         }).filter((message) => message !== null); 
+        const senderDeletedMessagesEntry = groups.reduce((result, group) => {
+            const deletedMessageEntry = group.deletedMessage.find(
+                (entry) => entry.userID.toString() === senderId
+            );
+            if (deletedMessageEntry) {
+                result.push(...deletedMessageEntry.deletedMessageofThisUser?.map((msg) => msg?.toString()));
+            }
+            return result;
+        }, []);
+        const filteredChat = allMessages.map((message) => {
+            if (senderDeletedMessagesEntry.includes(message?._id?.toString())) {
+                return null;
+            } else {
+                return message?.toObject();
+            }
+        }).filter((message) => message !== null); 
 
-//         return res.status(200).json({ data: filteredChat, success: true });
-//     } catch (error) {
-//         console.error('Error fetching group chat:', error);
-//         return res.status(500).json({ success: false, message: 'Something went wrong' });
-//     }
-// };
+        return res.status(200).json({ data: filteredChat, success: true });
+    } catch (error) {
+        console.error('Error fetching group chat:', error);
+        return res.status(500).json({ success: false, message: 'Something went wrong' });
+    }
+};
 
 
 
@@ -120,26 +153,26 @@ export const sendMessage = async (req, res) => {
     }
 }
 
-// export const sendGroupMessage = async (req, res) => {
-//     const { senderId, receiverId, message, groupID } = req.body;
-//     const { error } = sendMessageSchemaValidation.validate({ senderId, receiverId, message });
+export const sendGroupMessage = async (req, res) => {
+    const { senderId, receiverId, message, groupID } = req.body;
+    const { error } = sendMessageSchemaValidation.validate({ senderId, receiverId, message });
 
-//     if (error) return res.json({ success: false, message: error.details[0].message.replace(/['"]+/g, '') });
+    if (error) return res.json({ success: false, message: error.details[0].message.replace(/['"]+/g, '') });
 
-//     try {
-//         const newMessage = new Chat({ sender: senderId, receiver: receiverId, message });
-//         await newMessage.save();
+    try {
+        const newMessage = new Chat({ sender: senderId, receiver: receiverId, message });
+        await newMessage.save();
 
-//         if (newMessage) {
-//             const saveInGroup = await GroupChat.findOneAndUpdate({ _id: groupID }, { $push: { messages: newMessage._id } }, { new: true });
-//             return res.status(200).json({ success: true, message: 'Message sent successfully' })
-//         }
+        if (newMessage) {
+            const saveInGroup = await GroupChat.findOneAndUpdate({ _id: groupID }, { $push: { messages: newMessage._id } }, { new: true });
+            return res.status(200).json({ success: true, message: 'Message sent successfully' })
+        }
 
 
-//     } catch (error) {
-//         return res.status(500).json({ success: false, message: 'Something went wrong' })
-//     }
-// }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+}
 
 
 

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { groupData } from '../../types';
 import { setAllGroups, setChatSelected, setGroupSelected } from '../../slices/chatSlice';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RootState } from '../../store/store';
 import { MdDelete } from 'react-icons/md';
 import { delete_group } from '../../services';
@@ -29,8 +29,7 @@ export default function GroupConversationCard({ group   }: GroupConversationCard
         dispatch(setGroupSelected(group))
     }
 
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (typingOn && TyperID?.senderId === group._id) {
             setTyping(true)
         } else {
@@ -50,7 +49,7 @@ export default function GroupConversationCard({ group   }: GroupConversationCard
             toast.error(res?.message)
         }
     }
-
+    
     return (
         <div onClick={handleClick} className={`w-11/12 relative h-20  ${theme === 'on' ? 'bg-white  hover:bg-gray-300 text-black' : "bg-slate-800   hover:bg-slate-950 text-white"}  my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 justify-start  transition-all duration-700`}>
             <div className="avatar mx-4 placeholder">

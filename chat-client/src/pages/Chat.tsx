@@ -38,34 +38,22 @@ export default function Chat() {
     const theme = useSelector((state: RootState) => state.User.themeLight)
 
 
-
-    useEffect(() => {
-        if (!token || !userData) {
-            socket.emit('userOffline', userData?._id)
+    useEffect(()=>{
+        if(!token || !userData){
+            socket.emit('userOffline' , userData?._id)
             navigate('/')
         }
-    }, [token, userData])
-
-
-
-
-
+    },[token,userData])
 
     useEffect(() => {
+        getDataOfAllGroupsOFThisUser()
         getDataOfAllUsers()
-        // getDataOfAllGroupsOFThisUser()
-    }, [showConversationBox])
-
-
-
-
-
-
-
+    },[showConversationBox])
+    
     useEffect(() => {
         if (receiver && Object.keys(receiver).length > 0 || group && Object.keys(group).length > 0) {
             getChat();
-            // getGroupChat()
+            getGroupChat()
         } else {
             return;
         }
@@ -95,36 +83,36 @@ export default function Chat() {
         }
     }
 
-    // const getDataOfAllGroupsOFThisUser = async () => {
-    //     if (!userData?._id) return
-    //     const res = await get_user_group(userData?._id, token);
-    //     if (res?.success) {
-    //         dispatch(setAllGroups(res?.data))
-    //     } else {
-    //         toast.error(res?.message)
-    //     }
+    const getDataOfAllGroupsOFThisUser = async () => {
+        if (!userData?._id) return
+        const res = await get_user_group(userData?._id, token);
+        if (res?.success) {
+            dispatch(setAllGroups(res?.data))
+        } else {
+            toast.error(res?.message)
+        }
 
-    // }
+    }
 
 
-    // const getGroupChat = async () => {
-    //     dispatch(setUserMessageLoading(true));
-    //     const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
-    //     if (!uniqueID) return dispatch(setUserMessageLoading(false));
+    const getGroupChat = async () => {
+        dispatch(setUserMessageLoading(true));
+        const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
+        if (!uniqueID) return dispatch(setUserMessageLoading(false));
 
-    //     if (group) {
-    //         dispatch(setGroupMessages({ groupId: group?._id, messages: [] }));
-    //     }
+        if (group) {
+            dispatch(setGroupMessages({ groupId: group?._id, messages: [] }));
+        }
 
-    //     const getMessages = {groupId : group?._id,  senderId: userData?._id, receiverId: uniqueID } as unknown as string;
-    //     const res = await getGroupChatData(getMessages, token);
-    //     if (res?.success) {
-    //         dispatch(setGroupMessages({ groupId: group?._id, messages: res?.data }));
-    //         dispatch(setUserMessageLoading(false));
-    //     } else {
-    //         dispatch(setUserMessageLoading(false));
-    //     }
-    // };
+        const getMessages = {groupId : group?._id,  senderId: userData?._id, receiverId: uniqueID } as unknown as string;
+        const res = await getGroupChatData(getMessages, token);
+        if (res?.success) {
+            dispatch(setGroupMessages({ groupId: group?._id, messages: res?.data }));
+            dispatch(setUserMessageLoading(false));
+        } else {
+            dispatch(setUserMessageLoading(false));
+        }
+    };
 
 
     const useOutsideClick = (callback: () => void) => {
@@ -177,11 +165,11 @@ export default function Chat() {
                 user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
             );
         } 
-        // else {
-        //     return allGroups?.filter((group) =>
-        //         group?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-        //     );
-        // }
+        else {
+            return allGroups?.filter((group) =>
+                group?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
     }
 
     const handleSearchInputChange = useCallback(
@@ -198,30 +186,30 @@ export default function Chat() {
 
 
 
-    // const handleCreateGroup = async (e: FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault()
-    //     dispatch(setUserMessageLoading(true))
-    //     if (groupName === '' || selectedGroupUsers.length === 0) {
-    //         dispatch(setUserMessageLoading(false))
-    //         toast.error('Please fill all the fields')
-    //         return
-    //     }
+    const handleCreateGroup = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        dispatch(setUserMessageLoading(true))
+        if (groupName === '' || selectedGroupUsers.length === 0) {
+            dispatch(setUserMessageLoading(false))
+            toast.error('Please fill all the fields')
+            return
+        }
 
-    //     const finalData = { name: groupName, users: selectedGroupUsers, createdBy: userData?._id }
+        const finalData = { name: groupName, users: selectedGroupUsers, createdBy: userData?._id }
 
-    //     const res = await create_group(finalData, token);
-    //     if (res?.success) {
-    //         dispatch(setUserMessageLoading(false))
-    //         toast.success(res?.message)
-    //         setCreateGroup(false)
-    //     } else {
-    //         dispatch(setUserMessageLoading(false))
-    //         toast.error(res?.message)
-    //     }
+        const res = await create_group(finalData, token);
+        if (res?.success) {
+            dispatch(setUserMessageLoading(false))
+            toast.success(res?.message)
+            setCreateGroup(false)
+        } else {
+            dispatch(setUserMessageLoading(false))
+            toast.error(res?.message)
+        }
 
 
-    //     setShowConversationBox('basic')
-    // }
+        setShowConversationBox('basic')
+    }
 
 
     useEffect(() => {
@@ -354,7 +342,7 @@ export default function Chat() {
                             <p className='text-xl '>{userData?.name}</p>
                         </div>
                     }
-                    {/* {
+                    {
                         createGroup && <div ref={showNameRef} className='absolute z-50 flex-col items-center justify-center left-16 top-60 text-center w-96 flex  bg-slate-800 text-white px-3 py-4'>
                             <form onSubmit={handleCreateGroup} className='w-full h-full flex flex-col items-center justify-center'>
                                 <div className='flex flex-col text-start px-2 w-full mb-2'>
@@ -375,11 +363,11 @@ export default function Chat() {
 
 
                         </div>
-                    } */}
+                    }
 
                     <PiChatsFill onClick={() => setShowConversationBox('basic')} data-tip="Groups" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" />
-                    {/* <FaUserGroup onClick={() => setShowConversationBox('group')} data-tip="Groups" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" /> */}
-                    {/* <MdGroupAdd onClick={() => setCreateGroup(true)} data-tip="Create Group" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" /> */}
+                    <FaUserGroup onClick={() => setShowConversationBox('group')} data-tip="Groups" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" />
+                    <MdGroupAdd onClick={() => setCreateGroup(true)} data-tip="Create Group" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" />
 
 
                 </div>
@@ -402,12 +390,12 @@ export default function Chat() {
                                 </>
                                 :
                                 <>
-                                    {/* {
+                                    {
                                         filterItems(searchTerm)?.map((group, index) => (
                                             <GroupConversationCard  key={group?._id + index} group={group}  />
                                         )
                                         )
-                                    } */}
+                                    }
 
                                 </>
 
@@ -422,7 +410,7 @@ export default function Chat() {
                     {chatSelected === 'basic' ? (
                         <ChatCard />
                     ) : chatSelected === 'group' ? (
-                        <DummyChatCard />// <GroupChatCard  getGroupChat={getGroupChat} setShowConversationBox={setShowConversationBox} />
+                        <GroupChatCard  getGroupChat={getGroupChat} setShowConversationBox={setShowConversationBox} />
                     ) : (
                         <DummyChatCard />
                     )}

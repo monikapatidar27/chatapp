@@ -44,12 +44,8 @@ export default function GroupChatCard({ getGroupChat, setShowConversationBox }: 
     const uniqueID = `${receiver?.users?.map(user => user?._id).join('-')}-${receiver?.createdBy?._id}`;
 
 
-
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-
-
         if (!sendMessage || !user || !receiver) return toast.error('Please type something');
         const messageData = { message: sendMessage, senderId: user?._id, groupID: receiver?._id, receiverId: uniqueID }
 
@@ -229,21 +225,20 @@ export default function GroupChatCard({ getGroupChat, setShowConversationBox }: 
 
             </div>
             {selectedMessages.length > 0 && (
-                <div className="w-full h-12 flex items-center justify-center">
-                    <button
-                        onClick={handleDeleteMessage}
-                        className="btn btn-sm btn-error"
-                    >
-                        <MdDelete className="text-xl" />
-                        Delete {selectedMessages.length} {selectedMessages.length > 1 ? 'messages' : 'message'} from me
+                <div className='w-full h-12 flex items-center justify-center'>
+                    <button onClick={handleDeleteMessage}
+                    className='btn btn-sm btn-error'>
+                        <MdDelete className='text-xl' />
+                        Delete {selectedMessages.length}{selectedMessages.length > 1 ? 'message' : 'message'} from me
                     </button>
                 </div>
             )}
-
-            <form onSubmit={handleSendMessage} className={`h-20   ${theme === 'on' ? 'bg-white' : "bg-slate-600 "} flex items-center justify-start px-4`}>
-                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className={`input   ${theme === 'on' ? 'bg-white text-black ' : "bg-slate-600 text-white "}  input-bordered w-full max-w-full`} />
-                <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
+            <form onSubmit={handleSendMessage} className={`h-20 ${theme === 'on' ? 'bg-white' : "bg-slate-600"} flex items-center justify-start p-4`}>
+                <input value={sendMessage} onChange={(e)=>selectedMessages(e.target.value)} type="text" placeholder='Type here' className={`input ${theme === 'on' ? 'bg-white text-black' : 'bg-slate-600 text-white'} input-bordered w-full max-w-full`}/>
+                <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className='text-xl'/></button>
             </form>
+
+           
 
         </>
     )

@@ -73,11 +73,9 @@ export const chatSlice = createSlice({
             const { groupId, messages } = action.payload;
 
             if (Array.isArray(messages)) {
-                // Check if the messages are received from Socket.IO
                 const isFromSocketIO = messages.some(message => message.isFromSocketIO);
 
                 if (isFromSocketIO) {
-                    // Append the new messages to the existing conversation
                     if (state.groupMessages[groupId]) {
                         state.groupMessages[groupId].messages.push(...messages);
                     } else {
@@ -87,14 +85,12 @@ export const chatSlice = createSlice({
                         };
                     }
                 } else {
-                    // Replace the existing messages with the newly fetched messages
                     state.groupMessages[groupId] = {
                         groupId,
                         messages: [...messages]
                     };
                 }
             } else {
-                // Replace the existing messages with a single message
                 state.groupMessages[groupId] = {
                     groupId,
                     messages: [messages]

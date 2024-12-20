@@ -11,7 +11,7 @@ export const login_user = async (formData: unknown) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:14 ~ constlogin_user= ~ error:", error)
+        console.log("Something wents wrong.", error)
     }
 
 
@@ -30,7 +30,7 @@ export const register_user = async (formData: unknown) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:33 ~ constregister_user= ~ error:", error)
+        console.log("Something wents wrong", error)
     }
 }
 
@@ -47,7 +47,7 @@ export const get_all_users = async (id: unknown , token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:46 ~ constget_all_users= ~ error:", error)
+        console.log("Something wents wrong", error)
     }
 }
 
@@ -65,7 +65,7 @@ export const getChatData = async (data: any , token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:60 ~ getChatData ~ error:", error)
+        console.log("Something wents wrong.", error)
     }
 }
 export const getGroupChatData = async (data: any, token  : string) => {
@@ -81,7 +81,7 @@ export const getGroupChatData = async (data: any, token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:72 ~ getGroupChatData ~ error:", error)
+        console.log("Something wents wrong", error)
     }
 }
 
@@ -101,8 +101,8 @@ export const send_message = async (formData: any , token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:90 ~ constsend_message= ~ error:", error)
-        console.log('Error at send message (services) : ', error.message);
+        
+        console.log('Something wents wrong', error.message);
     }
 }
 
@@ -122,7 +122,7 @@ export const create_group  =  async (formData: any , token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:109 ~ constcreate_group= ~ error:", error)
+        console.log("Something went wrong", error)
     }
 }
 
@@ -138,7 +138,7 @@ export const get_user_group  = async (id: any , token  : string) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log("🚀 ~ file: index.ts:122 ~ constget_user_group= ~ error:", error)
+        console.log("Something wents wrong", error)
     }
 }
 
@@ -157,7 +157,7 @@ export const send_group_message = async (formData: any , token  : string) => {
             const data = await res.json();
             return data;
         } catch (error: any) {
-            console.log("🚀 ~ file: index.ts:140 ~ constsend_group_message= ~ error:", error)
+            console.log("Something wents wrong", error)
         }
 }
 
@@ -175,7 +175,7 @@ export const delete_group = async (ownerId  : string, groupId : string, token  :
         const data = await res.json();
         return data;
     } catch (error: any) {
-       console.log("🚀 ~ file: index.ts:178 ~ const delete_group= ~ error:", error)
+       console.log("Something wents wrong", error)
     }
 }
 
@@ -194,6 +194,6 @@ export const delete_messages_from_me = async (deletingData : any ,token  : strin
         const data = await res.json();
         return data;
     } catch (error: any) {
-       console.log("🚀 ~ file: index.ts:178 ~ const delete_group= ~ error:", error)
+       console.log("Something wents wrong", error)
     }
 }
