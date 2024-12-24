@@ -157,7 +157,7 @@ export default function Chat() {
         };
     };
 
-    const throttledFilter = throttle<string[]>(filterItems, 500);
+    
 
     const filterItems = (searchTerm: string) => {
         if (showConversationBox === 'basic') {
@@ -171,7 +171,7 @@ export default function Chat() {
             );
         }
     }
-
+    const throttledFilter = throttle<string[]>(filterItems, 500);
     const handleSearchInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchTerm(e.target.value);
