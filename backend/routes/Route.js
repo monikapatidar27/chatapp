@@ -1,6 +1,6 @@
 import express from 'express';
 import { LoginUser, RegisterUser } from '../controller/auth.js';
-import { createGroup, getAllGroups, getAllUsers, getChat, getGroupChat, sendGroupMessage, sendMessage } from '../controller/chat.js';
+import { createGroup, deleteGroup, deleteMessageFromMe, getAllGroups, getAllUsers, getChat, getGroupChat, sendGroupMessage, sendMessage } from '../controller/chat.js';
 import authenticateToken from '../middleware/index.js';
 const Router = express.Router();
 
