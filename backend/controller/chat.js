@@ -176,74 +176,74 @@ export const sendGroupMessage = async (req, res) => {
 
 
 
-// export const deleteGroup = async (req, res) => {
-//     const { groupId, ownerId } = req.query
+export const deleteGroup = async (req, res) => {
+    const { groupId, ownerId } = req.query
 
-//     if (!groupId || !ownerId) return res.status(400).json({ success: false, message: 'groupId and ownerId are required' })
+    if (!groupId || !ownerId) return res.status(400).json({ success: false, message: 'groupId and ownerId are required' })
 
-//     try {
-//         const getGroup = await GroupChat.findOne({ _id: groupId });
-//         if (getGroup?.createdBy?.toString() === ownerId) {
-//             const deletedGroup = await GroupChat.findByIdAndDelete(groupId);
-//             if (deletedGroup) {
-//                 const query = {
-//                     $or: [
-//                         { createdBy: ownerId },
-//                         { users: ownerId }
-//                     ]
-//                 };
-//                 const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
-//                 return res.status(200).json({ data: getGroupofThisUser, success: true, message: 'Group deleted successfully' })
-//             }
+    try {
+        const getGroup = await GroupChat.findOne({ _id: groupId });
+        if (getGroup?.createdBy?.toString() === ownerId) {
+            const deletedGroup = await GroupChat.findByIdAndDelete(groupId);
+            if (deletedGroup) {
+                const query = {
+                    $or: [
+                        { createdBy: ownerId },
+                        { users: ownerId }
+                    ]
+                };
+                const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
+                return res.status(200).json({ data: getGroupofThisUser, success: true, message: 'Group deleted successfully' })
+            }
 
-//         } else {
-//             return res.status(400).json({ success: false, message: 'You are not allowed to delete this group' })
-//         }
-//     } catch (error) {
-//         return res.status(500).json({ success: false, message: 'Something went wrong' })
-//     }
-
-
-// }
+        } else {
+            return res.status(400).json({ success: false, message: 'You are not allowed to delete this group' })
+        }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
 
 
-// export const deleteMessageFromMe = async (req, res) => {
-//     const data = req.body
-//     const { groupId, deletedMessageofThisUser, userID } = data;
-//     try {
-//         const group = await GroupChat.findById(groupId);
+}
 
-//         if (!group) {
-//             return res.status(404).json({ error: 'Group not found' });
-//         }
 
-//         group.messages = group.messages.filter(
-//             (message) => !deletedMessageofThisUser.includes(message.toString())
-//         );
+export const deleteMessageFromMe = async (req, res) => {
+    const data = req.body
+    const { groupId, deletedMessageofThisUser, userID } = data;
+    try {
+        const group = await GroupChat.findById(groupId);
 
-//         const deletedMessageIndex = group.deletedMessage.findIndex(
-//             (entry) => entry.userID.toString() === userID
-//         );
-//         if (deletedMessageIndex !== -1) {
-//             group.deletedMessage[deletedMessageIndex].deletedMessageofThisUser = [
-//                 ...new Set([
-//                     ...group.deletedMessage[deletedMessageIndex].deletedMessageofThisUser,
-//                     ...deletedMessageofThisUser,
-//                 ]),
-//             ];
-//         } else {
-//             group.deletedMessage.push({
-//                 userID,
-//                 deletedMessageofThisUser,
-//             });
-//         }
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
 
-//         await group.save();
+        group.messages = group.messages.filter(
+            (message) => !deletedMessageofThisUser.includes(message.toString())
+        );
 
-//         return res
-//             .status(200)
-//             .json({ success: true, message: 'Selected messages deleted successfully' });
-//     } catch (error) {
-//         return res.status(500).json({ error: 'Failed to delete messages' });
-//     }
-// }
+        const deletedMessageIndex = group.deletedMessage.findIndex(
+            (entry) => entry.userID.toString() === userID
+        );
+        if (deletedMessageIndex !== -1) {
+            group.deletedMessage[deletedMessageIndex].deletedMessageofThisUser = [
+                ...new Set([
+                    ...group.deletedMessage[deletedMessageIndex].deletedMessageofThisUser,
+                    ...deletedMessageofThisUser,
+                ]),
+            ];
+        } else {
+            group.deletedMessage.push({
+                userID,
+                deletedMessageofThisUser,
+            });
+        }
+
+        await group.save();
+
+        return res
+            .status(200)
+            .json({ success: true, message: 'Selected messages deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to delete messages' });
+    }
+}

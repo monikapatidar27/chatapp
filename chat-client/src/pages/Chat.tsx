@@ -159,7 +159,7 @@ export default function Chat() {
 
     const throttledFilter = throttle<string[]>(filterItems, 500);
 
-    function filterItems(searchTerm: string) {
+    const filterItems = (searchTerm: string) => {
         if (showConversationBox === 'basic') {
             return allUsers?.filter((user) =>
                 user?.name?.toLowerCase().includes(searchTerm.toLowerCase())

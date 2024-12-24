@@ -17,8 +17,8 @@ Router.get('/get-user-group',authenticateToken, getAllGroups)
 Router.post('/send-group-message',authenticateToken , sendGroupMessage)
 Router.get('/get-group-chat',authenticateToken, getGroupChat)
 
-// Router.delete('/delete-group' , authenticateToken, deleteGroup )
-// Router.delete('/delete-group-message-from-me' , authenticateToken , deleteMessageFromMe)
+Router.delete('/delete-group' , authenticateToken, deleteGroup )
+Router.delete('/delete-group-message-from-me' , authenticateToken , deleteMessageFromMe)
 
 
 Router.use('*', (req, res) => {
