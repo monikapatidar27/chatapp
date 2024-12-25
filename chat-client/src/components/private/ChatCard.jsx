@@ -174,18 +174,18 @@ export default function ChatCard() {
             theme === "on" ? "bg-white text-black " : "bg-slate-600 text-white "
           }  input-bordered w-full max-w-full`}
         />
-          {/* { showEmojis &&  (<button onClick={()=>setShowEmojis(!showEmojis)} className="btn btn-circle btn-light mx-3"> */}
-         {/* <AiOutlineClose />
-        </button> )} */}
-        {/* { !showEmojis &&  (   <button onClick={handleClickEmoji} className="btn btn-circle btn-warning mx-3">
+          { showEmojis &&  (<button onClick={()=>setShowEmojis(!showEmojis)} className="btn btn-circle btn-light mx-3"> 
+         <AiOutlineClose />
+        </button> )} 
+        { !showEmojis &&  (   <button onClick={handleClickEmoji} className="btn btn-circle btn-warning mx-3">
          <CiFaceSmile className="text-xl"  />
-        </button>)} */}
+        </button>)} 
      
         <button  type = "submit"className="btn btn-circle btn-primary mx-3">
           <AiOutlineSend className="text-xl" />
         </button>
     
-        {/* <div>
+        <div>
           {showEmojis && (
             <Picker
             onEmojiSelect={handleEmojiSelect}
@@ -200,7 +200,7 @@ export default function ChatCard() {
               theme="dark"
             />
           )}
-        </div> */}
+        </div>
     
       </form>
          
